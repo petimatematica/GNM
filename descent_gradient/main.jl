@@ -11,7 +11,7 @@ using LinearAlgebra
 
 # Dimension of problem
 n = 2
-
+#teste
 # Setting objective function 
 f(x) = rosenbrock2(x)
 
