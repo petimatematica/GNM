@@ -21,7 +21,8 @@ g(x) = grad_rosenbrock2(x)
 x0 = [2.0;-2.0]
 epsilon = 1.e-8
 maxiter = 1000
-(x,ngfx,iter,error) = descentgradient(x0,f,g,epsilon,maxiter)
+linesearch = goldstein_test
+(x,ngfx,iter,error) = descentgradient(x0,f,g,epsilon,maxiter,linesearch)
 
 
 

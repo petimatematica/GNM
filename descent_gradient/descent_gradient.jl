@@ -9,7 +9,7 @@
 
 
 
-function descentgradient(x,f,g,epsilon,maxiter)
+function descentgradient(x,f,g,epsilon,maxiter,linesearch)
     error = 0
     iter = 0
     stp = -1.0
@@ -33,10 +33,9 @@ function descentgradient(x,f,g,epsilon,maxiter)
             return(x,ngfx,iter,error)
         end
 
-        # Linesearch (Armijo)
-        sigma = 1.e-3
+        # Linesearch
         stpmin = 1.e-10
-        (stp,x,error) =  armijo(x,f,gfx,sigma,stpmin)
+        (stp,x,error) =  linesearch(x,f,gfx,stpmin)
 
     end
 
