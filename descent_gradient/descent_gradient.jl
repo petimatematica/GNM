@@ -9,13 +9,14 @@
 
 
 
-function descentgradient(x,f,g,epsilon,maxiter,linesearch)
+function descentgradient(x,f,g,epsilon,maxiter)
     error = 0
     iter = 0
     stp = -1.0
     while true
         gfx = g(x)
         ngfx = norm(gfx)
+
         fx = f(x)
 
         println("$iter $ngfx  $fx  $stp")
@@ -32,15 +33,12 @@ function descentgradient(x,f,g,epsilon,maxiter,linesearch)
             return(x,ngfx,iter,error)
         end
 
-        #Linesearch (Armijo)
-        sigma = 1.e-4
+        # Linesearch (Armijo)
+        sigma = 1.e-3
         stpmin = 1.e-10
-        #(stp,x,error) =  armijo(x,f,gfx,sigma,stpmin)
+        (stp,x,error) =  armijo(x,f,gfx,sigma,stpmin)
 
-        # Linesearch (Goldstein)
-        stpmin = 1.e-8
-        alpha = 1.e-4
-        beta = 1-alpha
-        (stp,x,error) = linesearch(x,f,gfx,alpha,beta)  
     end
+
+
 end

@@ -36,7 +36,7 @@ function goldstein(x,f,gfx,alpha,beta,stpmin)
     fx = f(x)
     while true
         gtg = gfx' * gfx
-        p = x + stp * gfx 
+        p = x - stp * gfx 
         fp = f(p) 
         steptestone = fp - fx - alpha * gtg * stp #armijo
         steptestwo = fp - fx - beta * gtg * stp 
