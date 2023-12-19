@@ -46,7 +46,7 @@ function goldstein_test(x,f,gfx,stpmin)
 
     alpha  =  2.0
     alphaA = 0.0
-    alphaV = 1.0
+    alphaV = 1.e-16
 
     while true
         println("alpha = $alpha")        
@@ -60,7 +60,7 @@ function goldstein_test(x,f,gfx,stpmin)
         flag2 = ~(stptest2 < 0.0) # flag2 = True Outra ok
 
         if flag1 && flag2
-            return alpha
+            return alpha,q,error
         else
             if ~flag1
                 alphaA = alpha
@@ -68,7 +68,7 @@ function goldstein_test(x,f,gfx,stpmin)
                 alphaV = alpha
             end
         end
-        if alphaA < 1.e-16
+        if alphaA < 1.e-18
             alpha = theta1 * alpha
         else
             alpha = (1.0 - theta2)*alphaV + theta2 * alphaA 
