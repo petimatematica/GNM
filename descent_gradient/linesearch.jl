@@ -27,55 +27,6 @@ function armijo(x,f,gfx,stpmin)
         end
     end
 end
-#
-#   Goldstein teste
-#
-function goldstein_test(x,f,gfx,stpmin)
-
-    error = 0
-    sigma1 = 1.e-3
-    sigma2 = 1.0 - sigma1
-    theta1 = 1.5
-    theta2 = 0.5
-
-    fx = f(x)
-    
-    gf = gfx' * gfx
-    gf1 = sigma1 * gf
-    gf2 = sigma2 * gf
-
-    alpha  =  2.0
-    alphaA = 0.0
-    alphaV = 1.e-16
-
-    while true
-        println("alpha = $alpha")        
-        q = x - alpha * gfx
-        fq = f(q)
-
-        stptest1 = fq - fx - gf2
-        stptest2 = fq - fx - gf1
-
-        flag1 = ~(stptest1 > 0.0) # flag1 = True Armijo OK
-        flag2 = ~(stptest2 < 0.0) # flag2 = True Outra ok
-
-        if flag1 && flag2
-            return alpha,q,error
-        else
-            if ~flag1
-                alphaA = alpha
-            else
-                alphaV = alpha
-            end
-        end
-        if alphaA < 1.e-18
-            alpha = theta1 * alpha
-        else
-            alpha = (1.0 - theta2)*alphaV + theta2 * alphaA 
-        end
-
-    end
-end
 
 
 #
@@ -114,4 +65,35 @@ function goldstein(x,f,gfx,stpmin)
             return(stp,p,error)
         end    
     end
+end
+
+
+function goldstein_test(x,f,g,minstep)  # Working!!!!   
+        eta = 0.25
+        eta1 = eta
+        eta2 = 1 - eta   
+        gTg = g' * g
+        alpha = 1.0;
+        fx = f(x)
+        while true
+            q = x - alpha * g
+            fq = f(q)
+
+            #Inequalities
+            stptestA = ~(fq - fx < -alpha * eta2 * gTg)
+            stptestB = ~(fq - fx > -alpha * eta1 * gTg)
+    
+            if stptestA && stptestB  
+                return(alpha,q,0)
+            else
+                if ~stptestB
+                    alpha = eta1 * alpha
+                    if alpha < minstep
+                        return(alpha,q,1)
+                    end
+                else
+                    alpha = alpha / eta2
+                end
+            end
+        end
 end
