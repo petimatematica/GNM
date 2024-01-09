@@ -97,3 +97,38 @@ function goldstein_test(x,f,g,minstep)  # Working!!!!
             end
         end
 end
+
+
+#
+# Wolfe
+#
+#
+function wolfe(x,f,g,minstep)   
+    eta = 0.25
+    eta1 = eta
+    eta2 = 1 - eta   
+    gTg = g' * g
+    alpha = 1.0;
+    fx = f(x)
+    while true
+        q = x - alpha * g
+        fq = f(q)
+        w = dot(grad_rosenbrock2(q), -g)
+        #Inequalities
+        stptestA = ~( w < -eta2 * gTg)
+        stptestB = ~(fq - fx > -alpha * eta1 * gTg)
+
+        if stptestA && stptestB  
+            return(alpha,q,0)
+        else
+            if ~stptestB
+                alpha = eta1 * alpha
+                if alpha < minstep
+                    return(alpha,q,1)
+                end
+            else
+                alpha = alpha / eta2
+            end
+        end
+    end
+end
