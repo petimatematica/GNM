@@ -1,4 +1,4 @@
-# GNM
+# HGNM
 
 This is a Globalized Newton Method
 
