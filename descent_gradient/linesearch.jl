@@ -68,7 +68,7 @@ function goldstein(x,f,gfx,stpmin)
 end
 
 
-function goldstein_test(x,f,g,minstep)  # Working!!!!   
+function goldstein_test(x,f,g,minstep)     
         eta = 0.25
         eta1 = eta
         eta2 = 1 - eta   

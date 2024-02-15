@@ -4,7 +4,6 @@
 function rosenbrock2(x)
     return (x[1]^2 - x[2])^2 + (x[1] - 1.0)^2
 end
-
 #
 #  Gradient of Rosenbrock function
 #
