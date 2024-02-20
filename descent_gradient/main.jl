@@ -21,8 +21,8 @@ g(x) = grad_rosenbrock2(x)
 x0 = [1.0;-1.0]
 epsilon = 1.e-8
 maxiter = 100
-linesearch = Armijo
-(x,iter,error) = newtonmethod(x0,f,epsilon,maxiter,linesearch)
+linesearch = armijo
+(x,iter,error) = descentgradient(x,f, g,epsilon,maxiter,linesearch)
 
 
 

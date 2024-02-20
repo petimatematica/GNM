@@ -18,7 +18,6 @@ function descentgradient(x,f, g,epsilon,maxiter,linesearch)
         ngfx = norm(gfx)
 
         fx = f(x)
-
         println("$iter $ngfx  $fx  $stp")
 
         # Convergence checking

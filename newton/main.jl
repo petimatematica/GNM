@@ -3,7 +3,7 @@
 #
 
 using CUTEst, NLPModels, LinearAlgebra
-include("newton.jl")
+include("gradient.jl")
 
 
 nlp = CUTEstModel("ROSENBR")
@@ -36,7 +36,7 @@ gamma = 1.e-4
 #Solver calling
 linesearch = armijo
 
-sol,error = newton()
+sol,error = gradient()
 
 println("$sol")
 
