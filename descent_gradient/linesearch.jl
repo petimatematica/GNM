@@ -7,89 +7,72 @@
 #
 # f(x^k+alpha f'(x^k))<=f(x^k)-sigma alpha||f'(x^k)||^2
 #
-function armijo(x,f,gfx,stpmin)
-    sigma = 1.e-3
-    error = 0
-    stp = 1.0
-    fx = f(x)
-    gtg = sigma * gfx' * gfx
+#function armijo(x,f,gfx,stpmin)
+    #sigma = 1.e-3
+    #error = 0
+    #stp = 1.0
+    #fx = f(x)
+    #gtg = sigma * gfx' * gfx
+    #while true
+     #   q = x - stp * gfx
+      #  fq = f(q)
+       # stptest = fq - fx + stp * gtg
+        #if stptest > 0.0
+         #   stp = stp / 2.0
+          #  if stp < stpmin
+           #     return(stp,q,error)
+            #end
+        #else
+         #   return(stp,q,error)
+        #end
+    #end
+#end
+function armijo(x_k,gradf_x,d_k,fx_k,gamma)
+    
+    alpha = 1.0
+    gtd = gamma * dot(gradf_x,d_k)
+
     while true
-        q = x - stp * gfx
-        fq = f(q)
-        stptest = fq - fx + stp * gtg
-        if stptest > 0.0
-            stp = stp / 2.0
-            if stp < stpmin
-                return(stp,q,error)
-            end
+        x_kp1 = x_k + alpha * d_k
+        fx_kp1 = f(x_kp1)
+
+        alpha_test = fx_kp1 > fx_k + alpha * gtd
+
+        if ~alpha_test
+            return alpha
         else
-            return(stp,q,error)
+            alpha = alpha / 2.0
         end
+
     end
+
 end
 
-
 #
-# Goldstein
-# 
+#  Goldstein
 #
-function goldstein(x,f,gfx,stpmin)   
-    error = 0
-    beta = 1.e-4
-    alpha =  1.0 - beta
-    stp = 1.0
-    fx = f(x)
-    while true
-        gtg = gfx' * gfx
-        p = x - stp * gfx 
-        fp = f(p) 
-        steptestone = fp - fx - alpha * gtg * stp #armijo
-        steptestwo = fp - fx - beta * gtg * stp 
-        if steptestone > 0.0 && steptestwo < 0
-            stp = stp / 2.0  
-         else 
-            if  steptestwo < 0
-                stp = stp * alpha
-                if stp<stpmin
-                   error=1
-                   return(stp,p,error) 
-                end
-            end
-            if steptestone > 0.0
-                stp = stp / beta
-                if stp<stpmin
-                    error=1
-                    return(stp,p,error) 
-                 end 
-            end
-            return(stp,p,error)
-        end    
-    end
-end
-
-
-function goldstein_test(x,f,g,minstep)     
-        eta = 0.25
-        eta1 = eta
-        eta2 = 1 - eta   
-        gTg = g' * g
+function goldstein(x_k,f,gradf_x, d_k)     
+        minstep = 1.e-6
+        eta1 = 0.25
+        eta2 = 1 - eta1   
+        gtd = dot(gradf_x,d_k)
         alpha = 1.0;
-        fx = f(x)
+        fx_k = f(x_k)
         while true
-            q = x - alpha * g
-            fq = f(q)
+            x_kp1 = x + alpha * d_k
+            fx_kp1 = f(x_kp1)
 
             #Inequalities
-            stptestA = ~(fq - fx < -alpha * eta2 * gTg)
-            stptestB = ~(fq - fx > -alpha * eta1 * gTg)
+            stptestA = ~(fx_kp1 > fx_k + alpha * eta2 * gtd) # Armijo
+            stptestB = ~(fx_kp1 < fx_k + alpha * eta1 * gtd)
     
             if stptestA && stptestB  
-                return(alpha,q,0)
+                return(alpha,x_kp1,0)
             else
                 if ~stptestB
                     alpha = eta1 * alpha
                     if alpha < minstep
-                        return(alpha,q,1)
+                        return(alpha,x_kp1,1)
                     end
                 else
                     alpha = alpha / eta2
@@ -102,18 +85,17 @@ end
 #
 # Wolfe
 #
-#
 function wolfe(x,f,g,minstep)   
     eta = 0.25
     eta1 = eta
     eta2 = 1 - eta   
-    gTg = g' * g
+    gTg = gfx' * gfx
     alpha = 1.0;
     fx = f(x)
     while true
-        q = x - alpha * g
+        q = x - alpha * gfx
         fq = f(q)
-        w = dot(grad_rosenbrock2(q), -g)
+        w = dot(gq, -gfx)
         #Inequalities
         stptestA = ~( w < -eta2 * gTg)
         stptestB = ~(fq - fx > -alpha * eta1 * gTg)

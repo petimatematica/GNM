@@ -3,7 +3,7 @@
 #
 
 include("testfunctions.jl")
-include("descent_gradient.jl")
+include("newton_method.jl")
 include("linesearch.jl")
 
 
@@ -21,8 +21,8 @@ g(x) = grad_rosenbrock2(x)
 x0 = [1.0;-1.0]
 epsilon = 1.e-8
 maxiter = 100
-linesearch = wolfe
-(x,ngfx,iter,error) = descentgradient(x0,f,g,epsilon,maxiter,linesearch)
+linesearch = Armijo
+(x,iter,error) = newtonmethod(x0,f,epsilon,maxiter,linesearch)
 
 
 

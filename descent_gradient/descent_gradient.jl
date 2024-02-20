@@ -9,7 +9,7 @@
 
 
 
-function descentgradient(x,f,g,epsilon,maxiter,linesearch)
+function descentgradient(x,f, g,epsilon,maxiter,linesearch)
     error = 0
     iter = 0
     stp = -1.0
@@ -27,7 +27,7 @@ function descentgradient(x,f,g,epsilon,maxiter,linesearch)
         end
 
         iter = iter + 1
-        # Maximum tteration numbers checking
+        # Maximum iteration numbers checking
         if iter > maxiter
             error = 1
             return(x,ngfx,iter,error)
