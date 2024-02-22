@@ -5,48 +5,29 @@
 #
 #  Armijo
 #
-# f(x^k+alpha f'(x^k))<=f(x^k)-sigma alpha||f'(x^k)||^2
 #
-#function armijo(x,f,gfx,stpmin)
-    #sigma = 1.e-3
-    #error = 0
-    #stp = 1.0
-    #fx = f(x)
-    #gtg = sigma * gfx' * gfx
-    #while true
-     #   q = x - stp * gfx
-      #  fq = f(q)
-       # stptest = fq - fx + stp * gtg
-        #if stptest > 0.0
-         #   stp = stp / 2.0
-          #  if stp < stpmin
-           #     return(stp,q,error)
-            #end
-        #else
-         #   return(stp,q,error)
-        #end
-    #end
-#end
-function armijo(x_k,gradf_x,d_k,fx_k,gamma)
-    
-    alpha = 1.0
-    gtd = gamma * dot(gradf_x,d_k)
-
+function armijo(x,f,gfx,stpmin)
+    sigma = 1.e-3
+    error = 0
+    stp = 1.0
+    fx = f(x)
+    gtg = sigma * gfx' * gfx
     while true
-        x_kp1 = x_k + alpha * d_k
-        fx_kp1 = f(x_kp1)
-
-        alpha_test = fx_kp1 > fx_k + alpha * gtd
-
-        if ~alpha_test
-            return alpha
+        q = x - stp * gfx
+        fq = f(q)
+        stptest = fq - fx + stp * gtg
+        if stptest > 0.0
+            stp = stp / 2.0
+           if stp < stpmin
+                return(stp,q,error)
+            end
         else
-            alpha = alpha / 2.0
+           return(stp,q,error)
         end
-
     end
-
 end
+
+
 
 #
 #  Goldstein
