@@ -4,7 +4,7 @@
 
 using CUTEst, NLPModels, LinearAlgebra
 include("gradient.jl")
-
+include("linesearch.jl")
 
 nlp = CUTEstModel("ROSENBR")
 
