@@ -44,28 +44,3 @@ function gradient()
 
 end
 
-#
-# Armijo Linesearch
-#
-function armijo(x_k,gradf_x,d_k,fx_k,gamma)
-    
-    alpha = 1.0
-    gtd = gamma * dot(gradf_x,d_k)
-
-    while true
-        x_kp1 = x_k + alpha * d_k
-        fx_kp1 = f(x_kp1)
-
-        alpha_test = fx_kp1 > fx_k + alpha * gtd
-
-        if ~alpha_test
-            return alpha
-        else
-            alpha = alpha / 2.0
-        end
-
-    end
-
-
-
-end
