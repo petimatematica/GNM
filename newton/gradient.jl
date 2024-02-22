@@ -16,8 +16,8 @@ function gradient()
         # Norm of gradient of f at x
         norm_gradf_x = norm(gradf_x,2)
 
-        fx = f(x)
-        println("$iter $ngfx  $fx  $stp")
+ #       fx = f(x)
+ #       println("$iter $norm_gradf_x  $fx  $stp")
 
         # Print info
         f_x = f(x)
@@ -38,7 +38,8 @@ function gradient()
         end
 
         # Linesearch
-        (stp,x,error) =  linesearch(x,gradf_x,f_x,gamma)
+        d = -gradf_x
+        (stp,x,error) =  linesearch(x,gradf_x,d,f_x,gamma)
 
     end
 

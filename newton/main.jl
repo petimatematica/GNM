@@ -27,10 +27,10 @@ end
 
 x0 = nlp.meta.x0
 
+#x0 = [1,0.99]
 
-
-maxiter = 1000
-tol = 1.e-8
+maxiter = 100
+tol = 1.e-6
 gamma = 1.e-4
 
 #Solver calling
