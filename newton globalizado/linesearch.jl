@@ -2,7 +2,6 @@
 # Armijo 
 #
 function armijo(x_k,gradf_x,d_k,fx_k,gamma)
-    
     alpha = 1.0
     gtd = gamma * dot(gradf_x,d_k)
 

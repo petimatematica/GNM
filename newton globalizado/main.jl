@@ -6,7 +6,7 @@ using CUTEst, NLPModels, LinearAlgebra
 include("gradient.jl")
 include("linesearch.jl")
 
-nlp = CUTEstModel("ROSENBR")
+nlp = CUTEstModel("HUMPS")
 
 
 # Objectibve function
@@ -34,7 +34,7 @@ tol = 1.e-6
 gamma = 1.e-4
 
 #Solver calling
-linesearch = armijo
+linesearch = goldstein
 
 sol,error = gradient()
 
