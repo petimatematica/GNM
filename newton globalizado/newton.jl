@@ -39,9 +39,9 @@ function newton()
         d = -H_x \ gradf_x
 
         # Linesearch
-        alpha = linesearch(x,gradf_x,d,f_x,gamma)
+        alpha,x,ierro = linesearch(x,gradf_x,d,f_x,gamma)
 
-        x = x + alpha * d
+#        x = x + alpha * d
         
     end
 

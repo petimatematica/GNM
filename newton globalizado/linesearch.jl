@@ -37,19 +37,19 @@ function goldstein(x_k,gradf_x,d_k,fx_k,gamma)
         fx_kp1 = f(x_kp1)
 
         #Inequalities
-        stptestA = ~(fx_kp1 > fx_k + alpha * eta2 * gtd) # Armijo
-        stptestB = ~(fx_kp1 < fx_k + alpha * eta1 * gtd)
+        stptestA = ~(fx_kp1 > fx_k + alpha * eta1 * gtd) # Armijo
+        stptestB = ~(fx_kp1 < fx_k + alpha * eta2 * gtd)
 
         if stptestA && stptestB  
             return(alpha,x_kp1,0)
         else
             if ~stptestB
-                alpha = eta1 * alpha
+                alpha =  alpha / eta2
                 if alpha < minstep
                     return(alpha,x_kp1,1)
                 end
             else
-                alpha = alpha / eta2
+                alpha = alpha * eta1
             end
         end
     end
