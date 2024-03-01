@@ -1,6 +1,3 @@
-#
-# Newton method
-#
 
 using NLPModels, LinearAlgebra, CUTEst
 include("gradient.jl")
@@ -32,8 +29,6 @@ end
 
 
 x0 = nlp.meta.x0
-#x0 = [-1.2,1]
-#x0 = [1,0.99]
 
 maxiter = 1000000
 tol = 1.e-6
@@ -41,11 +36,10 @@ gamma = 1.e-4
 
 #Solver calling
 linesearch = goldstein
+#linesearchG = goldstein
+#linesearchN = goldstein
 
 sol,error = newton()
-
-
-
 
 println("$sol")
 
