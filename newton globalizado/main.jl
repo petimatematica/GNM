@@ -35,9 +35,9 @@ tol = 1.e-6
 gamma = 1.e-4
 
 #Solver calling
-linesearch = goldstein
-#linesearchG = goldstein
-#linesearchN = goldstein
+#linesearch = goldstein
+linesearchG = goldstein
+linesearchN = goldstein
 
 sol,error = newton()
 
