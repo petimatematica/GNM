@@ -16,14 +16,14 @@ function hybrid()
         # Norm of gradient of f at x
         norm_gradf_x = norm(gradf_x, 2)
 
-        if norm_gradf_x > 0.25
+        if norm_gradf_x > delta
         
             # Print info
             f_x = f(x)
             println("G: iter = $iter || grad f(x) || = $norm_gradf_x  f(x) = $f_x  alpha = $stp")
 
             # Convergence checking
-            if norm_gradf_x < tol
+            if norm_gradf_x < epsilon
             error = 0
             return (x, error)
             end
