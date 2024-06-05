@@ -32,7 +32,7 @@ x0 = nlp.meta.x0
 
 maxiter = 1000000
 delta = 1.e-1
-epsilon = 1.e-6
+tol = 1.e-6
 gamma = 1.e-4
 
 #Solver calling
@@ -40,7 +40,7 @@ gamma = 1.e-4
 linesearchG = goldstein
 linesearchN = goldstein
 
-sol,error = newton()
+sol,error = hybrid()
 
 println("$sol")
 
