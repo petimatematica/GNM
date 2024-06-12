@@ -1,47 +1,54 @@
 
 using NLPModels, LinearAlgebra, CUTEst
+
 include("gradient.jl")
 include("linesearch.jl")
 include("newton.jl")
+include("hybrid.jl")
 
-nlp = CUTEstModel("ROSENBR")
-
-
-# Objectibve function
-function f(x)
-    return obj(nlp,x)
-    #return 100*(x[2]-x[1]^2)^2+(x[1]-1)^2
+function points(r, num_chutes)
+    points = []
+    for i in 0:num_chutes-1
+        theta = 2 * π * i / num_chutes
+        x = r * cos(theta)
+        y = r * sin(theta)
+        push!(points, (x, y))
+    end
+    return points
 end
-
-# Gradient of objective function
-function gradf(x)
-    return grad(nlp,x)
-    #G = zeros(2,1)
-    #G[1] = -400*x[1]*(x[2]-x[1]^2)+2*(x[1]-1)
-    #G[2] = 200*(x[2]-x[1]^2)
-    return G
-end
-
-# Hessian of objective functionm
-function hessf(x)
-    return hess(nlp,x)
-end
-
-
-x0 = nlp.meta.x0
-
-maxiter = 1000000
-delta = 1.e-1
-tol = 1.e-6
-gamma = 1.e-4
-
-#Solver calling
-#linesearch = goldstein
-linesearchG = goldstein
-linesearchN = goldstein
-
-sol,error = hybrid()
-
-println("$sol")
-
-finalize(nlp)
+    maxiter = 100
+    delta = 1.e-2 #troca da direção
+    epsilon = 1.e-6
+    gamma = 1.e-4
+    linesearchG = armijo
+    linesearchN = wolfe
+    
+    r = 1.0
+    num_chutes = 10
+    circle_points = points(r, num_chutes)
+    
+    eco_filename = "eco_MH.txt"
+    open(eco_filename, "w") do file
+        println(file, "Número de chutes: $num_chutes\n")
+    end
+    
+    nlp = CUTEstModel("ROSENBR")
+    
+    for (i, (x, y)) in enumerate(circle_points)
+        println("Chute $i: x = $x, y = $y")
+        
+        x_init = [x, y]
+        
+        sol, error = hybrid()
+        
+        open(eco_filename, "a") do file
+            println(file, "\nChute $i: x = $x, y = $y")
+            if error == 0
+                println(file, "Solução: $sol")
+            else
+                println(file, "Número máximo de iterações atingido.")
+            end
+        end
+    end
+    
+    finalize(nlp)
