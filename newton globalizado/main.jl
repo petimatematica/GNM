@@ -6,16 +6,7 @@ include("linesearch.jl")
 include("newton.jl")
 include("hybrid.jl")
 
-function points(r, num_chutes)
-    points = []
-    for i in 0:num_chutes-1
-        theta = 2 * π * i / num_chutes
-        x = r * cos(theta)
-        y = r * sin(theta)
-        push!(points, (x, y))
-    end
-    return points
-end
+
     maxiter = 100
     delta = 1.e-2 #troca da direção
     epsilon = 1.e-6
@@ -23,9 +14,6 @@ end
     linesearchG = armijo
     linesearchN = wolfe
     
-    r = 1.0
-    num_chutes = 10
-    circle_points = points(r, num_chutes)
     
     eco_filename = "eco_MH.txt"
     open(eco_filename, "w") do file
