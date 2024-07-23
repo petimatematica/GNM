@@ -1,7 +1,7 @@
 #
 # Armijo 
 #
-function armijo(x_k,gradf_x,d_k,fx_k,gamma)
+function armijo(x_k,gradf_x,g,d_k,fx_k,gamma)
     alpha = 1.0
     gtd = gamma * dot(gradf_x,d_k)
 
@@ -25,7 +25,7 @@ end
 #
 # Goldstein
 #
-function goldstein(x_k,gradf_x,d_k,fx_k,gamma)     
+function goldstein(x_k,gradf_x,g,d_k,fx_k,gamma)     
     minstep = 1.e-6
     eta1 = 0.25
     eta2 = 1 - eta1   
@@ -57,7 +57,7 @@ end
 #
 # Wolfe
 #
-function wolfe(x_k,gradf_x,d_k,fx_k,gamma)     
+function wolfe(x_k,gradf_x,g,d_k,fx_k,gamma)     
     minstep = 1.e-6
     eta1 = 0.25
     eta2 = 1 - eta1   
@@ -69,7 +69,7 @@ function wolfe(x_k,gradf_x,d_k,fx_k,gamma)
 
         #Inequalities
         stptestA = ~(fx_kp1 > fx_k + alpha * eta1 * gtd) # Armijo
-        stptestB = ~(dot(gradf(x_kp1),d_k) < eta2 * gtd)
+        stptestB = ~(dot(g(x_kp1),d_k) < eta2 * gtd)
 
         if stptestA && stptestB  
             return(alpha,x_kp1,0)
