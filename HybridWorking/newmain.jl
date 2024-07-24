@@ -4,9 +4,11 @@ include("linesearch.jl")
 
 output = open("info.dat","w")
 
-problems = ["ROSENBR","BROYDN7D"]
+#problems = ["ROSENBR"]
+problems = CUTEst.select(min_var=2, max_var=2)
+length(problems)
 
-DELTA_tests = [1.0,1.e-1,1.e-2,1.e-3,1.e-4]
+DELTA_tests = [1.0,1.e-2,1.e-4]
 
 epsilon = 1.e-8
 maxiter = 10000

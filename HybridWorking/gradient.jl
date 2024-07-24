@@ -4,16 +4,10 @@
 function gradient()
     x = copy(x0)
     error = 0
-
-    # Iteration number seting
     iter = 0
     stp = -1.0
     while true
-
-        # Gradient of f at x
         gradf_x = gradf(x)
-
-        # Norm of gradient of f at x
         norm_gradf_x = norm(gradf_x,2)
 
  #       fx = f(x)
