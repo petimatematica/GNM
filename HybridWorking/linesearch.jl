@@ -1,7 +1,7 @@
 #
 # Armijo 
 #
-function armijo(x_k,gradf_x,g,d_k,fx_k,gamma)
+function armijo(x_k,gradf_x,g,d_k,fx_k,gamma,stpmin)
     alpha = 1.0
     gtd = gamma * dot(gradf_x,d_k)
 
@@ -15,6 +15,9 @@ function armijo(x_k,gradf_x,g,d_k,fx_k,gamma)
             return alpha,x_kp1,0
         else
             alpha = alpha / 2.0
+            if alpha < stpmin
+                return alpha,x_kp1,1
+            end
         end
 
     end
@@ -25,8 +28,8 @@ end
 #
 # Goldstein
 #
-function goldstein(x_k,gradf_x,g,d_k,fx_k,gamma)     
-    minstep = 1.e-6
+function goldstein(x_k,gradf_x,g,d_k,fx_k,gamma,minstep)     
+    #minstep = 1.e-6
     eta1 = 0.25
     eta2 = 1 - eta1   
     gtd = dot(gradf_x,d_k)
@@ -45,11 +48,11 @@ function goldstein(x_k,gradf_x,g,d_k,fx_k,gamma)
         else
             if ~stptestB
                 alpha =  alpha / eta2
+            else
+                alpha = alpha * eta1
                 if alpha < minstep
                     return(alpha,x_kp1,1)
                 end
-            else
-                alpha = alpha * eta1
             end
         end
     end
@@ -57,13 +60,19 @@ end
 #
 # Wolfe
 #
-function wolfe(x_k,gradf_x,g,d_k,fx_k,gamma)     
-    minstep = 1.e-6
+function wolfe(x_k,gradf_x,g,d_k,fx_k,gamma,minstep)     
+    #minstep = 1.e-6
     eta1 = 0.25
     eta2 = 1 - eta1   
     gtd = dot(gradf_x,d_k)
-    alpha = 1.0;
+    alpha = 1.0
+    count_test = 0
     while true
+        count_test += 1
+        if count_test > 10000
+            return(alpha,x_k,2)
+        end
+        #println("$alpha")
         x_kp1 = x_k + alpha * d_k
         fx_kp1 = f(x_kp1)
 
@@ -76,11 +85,12 @@ function wolfe(x_k,gradf_x,g,d_k,fx_k,gamma)
         else
             if ~stptestB
                 alpha =  alpha / eta2
+                
+            else
+                alpha = alpha * eta1
                 if alpha < minstep
                     return(alpha,x_kp1,1)
                 end
-            else
-                alpha = alpha * eta1
             end
         end
     end

@@ -1,6 +1,6 @@
 function hybrid(x :: Vector{Float64},fun :: Function ,grad :: Function ,hess :: Function, 
                 epsilon :: Float64, maxiter :: Int64, gamma :: Float64, delta :: Float64,
-                linesearchG :: Function , linesearchN :: Function )
+                linesearchG :: Function , linesearchN :: Function ,stpmin :: Float64)
 
     iter = 0
     dir = " "
@@ -16,6 +16,10 @@ function hybrid(x :: Vector{Float64},fun :: Function ,grad :: Function ,hess :: 
 
         norm_gradf_x = norm(gradf_x,2)
 
+        if isnan(norm_gradf_x)
+            return  return x,4,iter,N_count,norm_gradf_x,Inf
+        end
+
         #@printf("%5d  %20.15e  %20.15e %20.15e %3s \n",iter,norm_gradf_x,fx_k,stp,dir)
         if norm_gradf_x < epsilon
             et = time() - t0
@@ -25,19 +29,27 @@ function hybrid(x :: Vector{Float64},fun :: Function ,grad :: Function ,hess :: 
         iter += 1
         if iter > maxiter
             et = time() - t0
-            return x,1,iter,N_count,norm_gradf_x,et
+            return x,1,iter,N_count,norm_gradf_x,Inf
         end
 
         # Direction select
         if norm_gradf_x > delta 
             dir = "G"
             d = -gradf_x
-            stp, x, ~ = linesearchG(x,gradf_x,grad,d,fx_k,gamma)
+            stp, x, LS_error = linesearchG(x,gradf_x,grad,d,fx_k,gamma,stpmin)
+            if LS_error > 0
+                return x,2,iter,N_count,norm_gradf_x,Inf
+            end
+
         else
             dir = "N"
             N_count += 1
             d = - hess(x) \ gradf_x
-            stp,x,~ = linesearchN(x,gradf_x,grad,d,fx_k,gamma)
+            stp,x,LS_error = linesearchN(x,gradf_x,grad,d,fx_k,gamma,stpmin)
+            if LS_error > 0
+                return x,3,iter,N_count,norm_gradf_x,Inf
+            end
+
         end
 
 
