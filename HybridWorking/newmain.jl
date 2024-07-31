@@ -4,21 +4,23 @@ include("linesearch.jl")
 
 output = open("info.dat","w")
 
-#problems = ["ROSENBR"]
-#problems = CUTEst.select(min_var=10, max_var=10)
-problems = CUTEst.select(contype="unc",min_var=2,max_var=1000)
+custom_filter = x->x["origin"]=="real" 
+#problems = ["RAT43LS"]
+#problems = CUTEst.select(contype="unc",min_var=3,max_var=5)
+#problems = CUTEst.select(objtype="sum_of_squares", contype="unc", custom_filter=custom_filter)
+problems = CUTEst.select(objtype="quadratic", contype="unc", custom_filter=custom_filter)
 length(problems)
 
-DELTA_tests = [1.e-4]
+DELTA_tests = [1.0, 1.e-2, 1.e-4]
 
 epsilon = 1.e-6
-maxiter = 50
+maxiter = 10000
 gamma = 1.e-3
 stpmin = 1.e-12
 
 LG = armijo
 LN = armijo
-LineSearchs = [armijo]
+LineSearchs = [armijo, wolfe]
 
 for p in problems
     try
@@ -48,7 +50,15 @@ for p in problems
             end
         end
         finalize(nlp)
-        catch 
-        finalize(nlp)
+    catch e
+        println("Erro ao executar o problema", problems[p])
+        try
+            finalize(nlp)
+        catch finalize_error
+            println("Erro ao executar o problema", problems[p], finalize_error)
+        end
     end 
 end
+
+
+close(output)
