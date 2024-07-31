@@ -1,6 +1,6 @@
 function hybrid(x :: Vector{Float64},fun :: Function ,grad :: Function ,hess :: Function, 
-                epsilon :: Float64, maxiter :: Int64, gamma :: Float64, delta :: Float64,
-                linesearchG :: Function , linesearchN :: Function ,stpmin :: Float64)
+    epsilon :: Float64, maxiter :: Int64, gamma :: Float64, delta :: Float64,
+    linesearchG :: Function , linesearchN :: Function ,stpmin :: Float64)
 
     iter = 0
     dir = " "
@@ -28,7 +28,7 @@ function hybrid(x :: Vector{Float64},fun :: Function ,grad :: Function ,hess :: 
 
         iter += 1
         if iter > maxiter
-            et = time() - t0
+            et = time() - t0\
             return x,1,iter,N_count,norm_gradf_x,Inf
         end
 
@@ -42,20 +42,29 @@ function hybrid(x :: Vector{Float64},fun :: Function ,grad :: Function ,hess :: 
             end
 
         else
-            dir = "N"
-            N_count += 1
-            d = - hess(x) \ gradf_x
-            stp,x,LS_error = linesearchN(x,gradf_x,grad,d,fx_k,gamma,stpmin)
-            if LS_error > 0
-                return x,3,iter,N_count,norm_gradf_x,Inf
+            try
+                dir = "N"
+                d = - hess(x) \ gradf_x
+                N_count += 1
+                stp,x,LS_error = linesearchN(x,gradf_x,grad,d,fx_k,gamma,stpmin)
+                if LS_error > 0
+                    return x,3,iter,N_count,norm_gradf_x,Inf
+                end
+            catch e
+                dir = "G"
+                d = -gradf_x
+                stp, x, LS_error = linesearchG(x,gradf_x,grad,d,fx_k,gamma,stpmin)
+                if LS_error > 0
+                    return x,5,iter,N_count,norm_gradf_x,Inf
+                end
             end
-
+            
         end
 
 
 
     end
-    
+
 
 end
 
