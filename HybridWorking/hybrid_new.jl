@@ -67,4 +67,3 @@ function hybrid(x :: Vector{Float64},fun :: Function ,grad :: Function ,hess :: 
 
 
 end
-
