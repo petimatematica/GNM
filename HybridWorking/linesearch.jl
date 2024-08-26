@@ -34,6 +34,8 @@ function goldstein(x_k,gradf_x,g,d_k,fx_k,gamma,minstep)
     eta2 = 1 - eta1   
     gtd = dot(gradf_x,d_k)
     alpha = 1.0;
+    count_g = 0
+
    # fx_k = f(x_k)
     while true
         x_kp1 = x_k + alpha * d_k
@@ -42,7 +44,7 @@ function goldstein(x_k,gradf_x,g,d_k,fx_k,gamma,minstep)
         #Inequalities
         stptestA = ~(fx_kp1 > fx_k + alpha * eta1 * gtd) # Armijo
         stptestB = ~(fx_kp1 < fx_k + alpha * eta2 * gtd)
-
+        count_g =+ 1
         if stptestA && stptestB  
             return(alpha,x_kp1,0)
         else
@@ -54,6 +56,9 @@ function goldstein(x_k,gradf_x,g,d_k,fx_k,gamma,minstep)
                     return(alpha,x_kp1,1)
                 end
             end
+        end
+        if count_g > 1000
+            return(alpha,x_kp1,2)
         end
     end
 end
@@ -69,7 +74,7 @@ function wolfe(x_k,gradf_x,g,d_k,fx_k,gamma,minstep)
     count_test = 0
     while true
         count_test += 1
-        if count_test > 10000
+        if count_test > 1000
             return(alpha,x_k,2)
         end
         #println("$alpha")
