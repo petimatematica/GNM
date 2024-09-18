@@ -1,3 +1,6 @@
+# Hybrid Globalization of Newton's Method
+
+
 This repository contains the implementation of the Hybrid Method, which combines the global characteristic of the Gradient Method with the fast convergence rates of the Newton Method. By switching between the descent directions of these two methods, the Hybrid Method is used as a globalization strategy for Newton's method.
 
 # hybrid.jl
@@ -39,5 +42,4 @@ $\langle \nabla f(x^k + \alpha^k d^k), d^k \rangle \ge \sigma_2\langle \nabla f(
 - gradf_x (function): Gradient of the objective function.
 - d_k (vector): Direction of descent.
 
-#main.jl
 
