@@ -20,7 +20,6 @@ function hybrid(x :: Vector{Float64},fun :: Function ,grad :: Function ,hess :: 
             return  return x,4,iter,N_count,norm_gradf_x,Inf
         end
 
-        #@printf("%5d  %20.15e  %20.15e %20.15e %3s \n",iter,norm_gradf_x,fx_k,stp,dir)
         if norm_gradf_x < epsilon
             et = time() - t0
             return x,0,iter,N_count,norm_gradf_x,et
